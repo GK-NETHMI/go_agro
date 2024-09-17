@@ -15,7 +15,7 @@ import Notification from './pages/Notification'
 import FullNotification from './pages/FullNotification'
 import SubmitPage from './pages/SubmitPage'
 import DeletePage from './pages/DeletePage'
-
+import CreateNotification from './pages/CreateNotification'
 
 
 const App = () => {
@@ -28,8 +28,8 @@ const App = () => {
         <Route index path='/signup' element={<SignUp />} />
         <Route index path='/login' element={<Login />} />
         <Route index path='/compaint' element={<Complaint />} />
-        <Route path='/reviews/show' element={<ShowAll />} />
-        <Route path='/reviews/create' element={<CreateReview />} />
+        <Route path='/reviews/show' element={<ShowAll />} />        
+        <Route path='/reviews/create/:ordernumber' element={<CreateReview />} />
         <Route path='/reviews/details/:id' element={<ShowReview />} />
         <Route path='/reviews/edit/:id' element={<EditReview />} />
         <Route path='/reviews/delete/:id' element={<DeleteReview />} />
@@ -37,7 +37,7 @@ const App = () => {
         <Route path='/notifications/details/:id' element={<FullNotification />} />
         <Route path='/submit' element={<SubmitPage />} />
         <Route path='/DeletePage' element={<DeletePage />} />
-
+        <Route path='/createNotifi' element={<CreateNotification />} />
       </Routes>
     </div>
   )

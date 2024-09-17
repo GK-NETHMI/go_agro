@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import Spinner from '../components/Spinner';
-import '../App.css';
+
 
 
 const ShowReview = () => {
@@ -47,17 +47,17 @@ const ShowReview = () => {
               <span className='text-lg text-gray-700 font-semibold '>Id:</span>
               <span className='ml-4'>{review._id}</span>
             </div>
-            <div className='my-4'>
-              <span className='text-lg text-gray-700 font-semibold font-montserrat'>Username:</span>
-              <span className='ml-4'>{review.buyername}</span>
-            </div>
-            <div className='my-4'>
-              <span className='text-lg text-gray-700 font-semibold font-montserrat'>Order Name:</span>
-              <span className='ml-4'>{review.type}</span>
-            </div>
-            <div className='my-4'>
+              <div className='my-4'>
               <span className='text-lg text-gray-700 font-semibold font-montserrat'>Order Number:</span>
               <span className='ml-4'>{review.ordernumber}</span>
+            </div>
+            <div className='my-4'>
+              <span className='text-lg text-gray-700 font-semibold font-montserrat'>Order Details:</span>
+              <span className='ml-4'>{review.ordername}</span>
+            </div>
+            <div className='my-4'>
+              <span className='text-lg text-gray-700 font-semibold font-montserrat'>Username:</span>
+              <span className='ml-4'>{review.username}</span>
             </div>
             <div className='my-4'>
               <span className='text-lg text-gray-700 font-semibold font-montserrat'>Review Content:</span>

@@ -3,10 +3,7 @@ import mongoose from "mongoose";
 const reviewSchema = mongoose.Schema(
     {
         
-        buyername:{
-            type:String,
-            required : true,
-        },
+        
         content:{
             type:String,
             required : true,
@@ -25,10 +22,19 @@ const reviewSchema = mongoose.Schema(
             type:String,
             required : true,
         },
-        type:{
+        ordername:{
             type:String,
             required : true,
         },
+        username:{
+            type:String,
+            required : true,
+        },
+        photo: {
+            type:String,
+           
+        }
+       
     },
     {
         timestamps:true,

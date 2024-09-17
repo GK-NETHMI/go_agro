@@ -33,6 +33,10 @@
   .notification-message {
     flex: 1;
   }
+  .order-number{
+    color:#0ebed5;
+    margin-right: 50px;
+  }
   
   /* Unique styles for buttons */
   .button-link {

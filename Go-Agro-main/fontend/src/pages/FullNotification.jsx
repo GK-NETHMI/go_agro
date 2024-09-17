@@ -13,7 +13,7 @@ const FullNotification = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/notifications/${id}`)
+    .get(`http://localhost:5000/notifications/details/${id}`)
       .then((res) => {
         setNotification(res.data);
         setLoading(false);
@@ -22,7 +22,7 @@ const FullNotification = () => {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  }, [id]); // Added id to dependency array to refetch data when id changes
 
   return (
     <div style={styles.container}>
@@ -40,7 +40,7 @@ const FullNotification = () => {
         <div style={styles.notificationContent}>
           <div style={styles.notificationMessage}>{notification.message}</div>
           <div style={styles.notificationFullMsg}>{notification.fullMsg}</div>
-          <button style={styles.notificationButton} onClick={() => { window.location.href = '/reviews/create'; }}>
+          <button style={styles.notificationButton} onClick={() => { window.location.href = `/reviews/create/${notification._id}`; }}>
             {notification.onClickPath}
           </button>
           <div style={styles.notificationCreateTime}>

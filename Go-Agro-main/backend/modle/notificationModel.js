@@ -18,7 +18,20 @@ const notificationSchema = mongoose.Schema(
             type: Date,
             default: Date.now
         },
-    }
+        ordernumber: {
+          type: String,
+          required: true,
+        },
+        ordername: {
+          type: String,
+          required: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        }
+     
+      }
 )
  
 

@@ -6,16 +6,17 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { FaStar } from 'react-icons/fa';
-import '../App.css';
 
-const EditReviews = () => {
-  const [buyername, setBuyername] = useState('');
+
+const EditReviews = () => { 
   const [content, setContent] = useState('');
   const [publishDate, setPublishDate] = useState('');
   const [rating, setRating] = useState(0);
   const [ordernumber, setOrdernumber] = useState('');
-  const [type, setType] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [ordername, setOrdername] = useState('');
+  const [username, setUsername] = useState('');
+  const [photo, setPhoto] = useState([]);
+ const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
@@ -26,12 +27,14 @@ const EditReviews = () => {
     setLoading(true);
     axios.get(`http://localhost:5000/reviews/${id}`)
       .then((response) => {
-        setBuyername(response.data.buyername);
+        
         setContent(response.data.content)
         setPublishDate(response.data.publishDate)
         setRating(response.data.rating)
+       // setPhoto(response.data.photo)
+        setOrdername(response.data.ordername)
         setOrdernumber(response.data.ordernumber)
-        setType(response.data.type)
+        setUsername(response.data.username)       
         setLoading(false);
       }).catch((error) => {
         setLoading(false);
@@ -41,13 +44,36 @@ const EditReviews = () => {
   }, [])
 
   const handleEditReview = () => {
+
+// Check if the publish date has been modified
+if (publishDate !== getCurrentDate()) {
+  enqueueSnackbar("You cannot change the publish date.", { variant: 'error' });
+  return; // Exit the function without proceeding further
+}
+
+const handlePhotoChange = (e) => {
+  const files = Array.from(e.target.files); // Convert FileList to an array
+  setPhoto([...photo, ...files]); // Add new files to the existing array of photos
+};
+
+ // Check if any required fields are empty
+ if(!content  || !rating || !ordernumber||!publishDate||!ordername || !username) {
+  // Show a pop-up message informing the user to fill in all required fields
+  enqueueSnackbar('Please fill in all required fields.', { variant: 'error' });
+  return; // Exit the function without proceeding further
+}
+
+
     const data = {
-      buyername,
+      
       content,
       publishDate,
       rating,
       ordernumber,
-      type,
+      photo,
+      username,
+      ordername,
+     
     };
     setLoading(true);
     axios
@@ -86,6 +112,11 @@ const EditReviews = () => {
     setPublishDate(getCurrentDate());
   }, []);
 
+  const handlePhotoChange = (e) => {
+    const files = Array.from(e.target.files); // Convert FileList to an array
+    setPhoto([...photo, ...files]); // Add new files to the existing array of photos
+  };
+
   return (
     <div className='p-4'>
       <div className='flex'>
@@ -99,13 +130,21 @@ const EditReviews = () => {
       <h1 className='text-3xl my-5 text-center text-green-700'>Edit My Review</h1>
       {loading ? <Spinner /> : ''}
       <div className='flex flex-col border-2 rounded-xl w-[950px] shadow-md p-8 mx-auto'>
-        
+     
       <div className='my-5 flex flex-col'>
-          <label className='text-l mr-4 text-black-500'>Order Name</label>
+          <label className='text-l mr-4 text-black-500'>Order Details</label>
           <input
             type='text'
-            value={type}
-            onChange={(e) => setType(e.target.value)}
+            value={ordername}
+            onChange={(e) => setOrdername(e.target.value)}
+            disabled 
+            style={{
+              borderWidth: '2px',
+              borderColor: '#7173767f',
+              padding: '0.5rem 1rem',
+              width: '60%',
+              borderRadius: '0.5rem',
+            }}
             className='input-field mt-2'
           />
         </div>
@@ -116,50 +155,136 @@ const EditReviews = () => {
             type='text'
             value={ordernumber}
             onChange={(e) => setOrdernumber(e.target.value)}
-            className='input-field mt-2'
-          />
-        </div>
-        
-        <div className='my-5 flex flex-col'>
-          <label className='text-l mr-4 text-black-500'>User Name</label>
-          <input
-            type='text'
-            value={buyername}
-            onChange={(e) => setBuyername(e.target.value)}
+            disabled 
+            style={{
+              borderWidth: '2px',
+              borderColor: '#7173767f',
+              padding: '0.5rem 1rem',
+              width: '60%',
+              borderRadius: '0.5rem',
+            }}
             className='input-field mt-2'
           />
         </div>
 
+        <div className='my-5 flex flex-col'>
+          <label className='text-l mr-4 text-black-500'>Username</label>
+          <input
+            type='text'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            disabled 
+            style={{
+              borderWidth: '2px',
+              borderColor: '#7173767f',
+              padding: '0.5rem 1rem',
+              width: '60%',
+              borderRadius: '0.5rem',
+            }}
+            className='input-field mt-2'
+          />
+        </div>
+      
         <div className='my-5 flex flex-col'>
           <label className='text-l mr-4 text-black-500'>Select Descriptions</label>
           <div className="description-boxes">
             <div
               className={`box ${selectedBoxes.includes(1) && 'selected'}`}
               onClick={() => toggleBoxSelection(1)}
+              style={{
+                backgroundColor: '#f2f2f2',
+                padding: '15px',
+                textAlign: 'center',
+                width: '150px',
+                height: '60px',
+                borderRadius: '9px',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                marginBottom: '15px',
+                marginTop: '15px',
+                display: 'inline-block',
+                verticalAlign: 'top',
+                marginRight: '18px',
+              }}
             >
               Not as shown
             </div>
             <div
               className={`box ${selectedBoxes.includes(2) && 'selected'}`}
               onClick={() => toggleBoxSelection(2)}
+              style={{
+                backgroundColor: '#f2f2f2',
+                padding: '15px',
+                textAlign: 'center',
+                width: '150px',
+                height: '60px',
+                borderRadius: '9px',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                marginBottom: '15px',
+                marginTop: '15px',
+                display: 'inline-block',
+                verticalAlign: 'top',
+                marginRight: '18px',
+              }}
             >
               Timely Delivery
             </div>
             <div
               className={`box ${selectedBoxes.includes(3) && 'selected'}`}
               onClick={() => toggleBoxSelection(3)}
+              style={{
+                backgroundColor: '#f2f2f2',
+                padding: '15px',
+                textAlign: 'center',
+                width: '150px',
+                height: '60px',
+                borderRadius: '9px',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                marginBottom: '15px',
+                marginTop: '15px',
+                display: 'inline-block',
+                verticalAlign: 'top',
+                marginRight: '18px',
+              }}
             >
               Smooth Process
             </div>
             <div
               className={`box ${selectedBoxes.includes(4) && 'selected'}`}
               onClick={() => toggleBoxSelection(4)}
+              style={{
+                backgroundColor: '#f2f2f2',
+                padding: '15px',
+                textAlign: 'center',
+                width: '150px',
+                height: '60px',
+                borderRadius: '9px',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                marginBottom: '15px',
+                marginTop: '15px',
+                display: 'inline-block',
+                verticalAlign: 'top',
+                marginRight: '18px',
+              }}
             >
               Good Quality
             </div>
             <div
               className={`box ${selectedBoxes.includes(5) && 'selected'}`}
               onClick={() => toggleBoxSelection(5)}
+              style={{
+                backgroundColor: '#f2f2f2',
+                padding: '15px',
+                textAlign: 'center',
+                width: '150px',
+                height: '60px',
+                borderRadius: '9px',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                marginBottom: '15px',
+                marginTop: '15px',
+                display: 'inline-block',
+                verticalAlign: 'top',
+                marginRight: '18px',
+              }}
             >
               Trustworthy Supplier
             </div>
@@ -195,6 +320,7 @@ const EditReviews = () => {
                   color={currentRating <= (hover || rating) ? '#ffc107' : '#e4e5e9'}
                   onMouseEnter={() => setHover(currentRating)}
                   onMouseLeave={() => setHover(null)}
+                  style={{ cursor: 'pointer', marginRight: '0.5rem' }}
                 />
               </label>
             );
@@ -207,10 +333,50 @@ const EditReviews = () => {
             value={publishDate}
             onChange={(e) => setPublishDate(e.target.value)}
             className='input-field mt-2'
+            style={{
+              borderWidth: '2px',
+              borderColor: '#7173767f',
+              padding: '0.5rem 1rem',
+              width: '60%',
+              borderRadius: '0.5rem',
+            }}
           />
         </div>
+
+        <div className='my-5 flex flex-col'>
+          <label className='text-l mr-4 text-black-500'>Add one or more pictures</label>
+          <input
+            type='file'
+            name='photo'
+            accept='image/*'
+            onChange={handlePhotoChange} 
+            className='input-field mt-2' multiple
+            style={{
+              borderWidth: '2px',
+              borderColor: '#7173767f',
+              padding: '0.5rem 1rem',
+              width: '60%',
+              borderRadius: '0.5rem',
+            }}
+          />
+          {photo.map((photo, index) => (
+            <img key={index} 
+            src={URL.createObjectURL(photo)}
+             alt={`Selected Image ${index}`}
+              className='mt-2' 
+              style={{ maxWidth: '100px' }} />
+          ))}
+        </div>
+
         <div className='my-2 flex justify-center'>
-          <button className='p-2 bg-green-800 m-8 rounded-xl w-[350px] text-white' onClick={handleEditReview}>
+          <button 
+          style={{
+            padding: '0.5rem 2rem',
+            backgroundColor: '#2AA244',
+            color: 'white',
+            borderRadius: '0.5rem',
+          }}
+          className='p-2 bg-green-800 m-8 rounded-xl w-[350px] text-white' onClick={handleEditReview}>
             Resubmit Review
           </button>
         </div>
